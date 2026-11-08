@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خارج حدود الزمن | Beyond Time</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg:#080b17;
+  --panel:#11182a;
+  --cyan:#73e3e8;
+  --gold:#f3c879;
+  --violet:#b8a1ff;
+  --white:#f6f7fb;
+  --muted:#aab4ca;
+  --line:rgba(255,255,255,.13);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;background:var(--bg);color:var(--white);
+ font-family:'IBM Plex Sans Arabic',sans-serif;
+ overflow-x:hidden;
+}
+body:before{
+ content:"";position:fixed;inset:0;z-index:-2;
+ background:radial-gradient(ellipse at 20% 15%,#1c2850 0,transparent 40%),
+ radial-gradient(ellipse at 85% 75%,#172b3a 0,transparent 38%),#080b17;
+}
+button,textarea{font:inherit}
+button{cursor:pointer}
+
+.top{
+ position:fixed;z-index:10;top:0;left:0;right:0;
+ display:flex;justify-content:space-between;align-items:center;
+ padding:14px 5%;background:rgba(8,11,23,.8);
+ backdrop-filter:blur(16px);border-bottom:1px solid var(--line);
+}
+.brand{font-weight:700;letter-spacing:.5px}
+.brand span{color:var(--cyan)}
+.top small{color:var(--muted)}
+
+.wrap{width:min(1100px,90%);margin:auto}
+.screen{
+ min-height:100vh;padding:110px 0 70px;
+ display:none;animation:appear .7s ease;
+}
+.screen.active{display:block}
+
+@keyframes appear{
+ from{opacity:0;transform:translateY(18px)}
+ to{opacity:1;transform:none}
+}
+
+.hero{
+ min-height:85vh;display:grid;place-items:center;
+ text-align:center;position:relative;overflow:hidden;
+}
+.orbit{
+ width:min(68vw,430px);aspect-ratio:1;
+ border:1px solid rgba(115,227,232,.24);
+ border-radius:50%;position:absolute;top:48%;left:50%;
+ transform:translate(-50%,-50%);
+ box-shadow:0 0 90px rgba(115,227,232,.09),
+ inset 0 0 90px rgba(115,227,232,.05);
+}
+.orbit:before,.orbit:after{
+ content:"";position:absolute;border:1px solid rgba(184,161,255,.23);
+ border-radius:50%;inset:12%;
+ transform:rotate(35deg) scaleX(.55);
+}
+.orbit:after{
+ inset:25%;transform:rotate(-35deg) scaleX(.6);
+ border-color:rgba(243,200,121,.25);
+}
+.hero-content{position:relative;z-index:1;max-width:750px}
+.eyebrow{color:var(--cyan);letter-spacing:2px;font-size:.8rem}
+h1{font-size:clamp(2.6rem,8vw,5.6rem);line-height:1.2;margin:18px 0 8px}
+.en{direction:ltr;display:block;color:var(--cyan);letter-spacing:5px}
+.lead{color:#c2cadd;font-size:1.1rem;line-height:2;max-width:620px;margin:25px auto}
+
+.btn{
+ border:1px solid rgba(115,227,232,.5);
+ background:linear-gradient(120deg,rgba(115,227,232,.18),rgba(184,161,255,.16));
+ color:white;border-radius:999px;padding:13px 28px;
+ font-weight:600;transition:.25s;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 35px rgba(115,227,232,.15)}
+.btn.secondary{border-color:var(--line);background:rgba(255,255,255,.05)}
+
+.section-head{text-align:center;margin:0 auto 35px;max-width:720px}
+.section-head h2{font-size:clamp(2rem,5vw,3.2rem);margin:8px 0}
+.section-head p{color:var(--muted);line-height:1.9}
+
+.era-label{
+ display:inline-flex;gap:8px;align-items:center;
+ border:1px solid var(--line);padding:7px 14px;
+ border-radius:99px;color:var(--muted);
+}
+.era-label i{
+ width:7px;height:7px;background:var(--cyan);
+ border-radius:50%;box-shadow:0 0 12px var(--cyan);
+}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{
+ background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
+ border:1px solid var(--line);border-radius:22px;padding:22px;
+ min-height:190px;
+}
+.card h3{margin:10px 0}
+.card p{color:var(--muted);line-height:1.85;margin:0}
+.icon{font-size:1.8rem}
+
+.timeline{
+ border-right:1px solid rgba(115,227,232,.35);
+ margin:30px 12px 0;padding-right:25px;display:grid;gap:18px;
+}
+.event{position:relative;padding:5px 0 8px}
+.event:before{
+ content:"";position:absolute;right:-31px;top:12px;
+ width:11px;height:11px;border-radius:50%;
+ background:var(--cyan);box-shadow:0 0 15px var(--cyan);
+}
+.event b{color:var(--gold)}
+.event p{color:var(--muted);line-height:1.8;margin:5px 0}
+
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:25px 0}
+.compare{
+ border:1px solid var(--line);border-radius:20px;
+ padding:22px;background:rgba(255,255,255,.04);
+}
+.compare h3{margin-top:0}
+.compare p{color:var(--muted);line-height:1.9}
+
+.tag{
+ font-size:.8rem;padding:5px 10px;border-radius:99px;
+ background:rgba(255,255,255,.08);color:var(--gold);
+}
+.question{
+ background:rgba(255,255,255,.045);
+ border:1px solid var(--line);border-radius:22px;
+ padding:25px;margin:25px 0;
+}
+.options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}
+.option{
+ background:rgba(255,255,255,.04);border:1px solid var(--line);
+ color:white;border-radius:14px;padding:13px;text-align:right;
+}
+.option:hover,.option.selected{
+ border-color:var(--cyan);background:rgba(115,227,232,.1);
+}
+.feedback{min-height:32px;color:var(--cyan);margin-top:12px;line-height:1.8}
+
+.future-box{
+ border:1px solid rgba(184,161,255,.35);
+ background:linear-gradient(135deg,rgba(184,161,255,.1),rgba(115,227,232,.06));
+ border-radius:24px;padding:28px;margin:20px 0;
+}
+textarea{
+ width:100%;min-height:115px;resize:vertical;
+ border:1px solid var(--line);background:rgba(0,0,0,.2);
+ color:white;border-radius:15px;padding:15px;outline:none;
+}
+textarea:focus{border-color:var(--cyan)}
+.nav{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-top:30px}
+.small-note{color:var(--muted);font-size:.88rem;line-height:1.8}
+footer{border-top:1px solid var(--line);padding:25px 0;color:var(--muted);text-align:center;font-size:.85rem}
+.progress{height:3px;background:rgba(255,255,255,.1);position:fixed;top:61px;left:0;right:0;z-index:11}
+.progress span{display:block;height:100%;width:0;background:var(--cyan);transition:width .4s}
+
+@media(max-width:700px){
+ .grid{grid-template-columns:1fr}
+ .split{grid-template-columns:1fr}
+ .options{grid-template-columns:1fr}
+ .screen{padding-top:100px}
+ .card{min-height:unset}
+}
+</style>
+</head>
+
+<body>
+
+<header class="top">
+ <div class="brand">BEYOND <span>TIME</span> ◌</div>
+ <small>رحلة عبر عصور الذكاء الاصطناعي</small>
+</header>
+
+<div class="progress"><span id="bar"></span></div>
+
+<main>
+
+<!-- شاشة البداية -->
+<section class="screen active" id="start">
+ <div class="hero wrap">
+  <div class="orbit"></div>
+  <div class="hero-content">
+   <div class="eyebrow">تجربة رقمية تفاعلية · AI THROUGH MY EYES</div>
+   <h1>خارج حدود الزمن</h1>
+   <span class="en">BEYOND TIME</span>
+   <p class="lead">
+    كل زمن يحمل قصة، وكل اكتشاف يفتح بابًا جديدًا.
+    انطلق في رحلة من البدايات الأولى للذكاء الاصطناعي،
+    إلى حضوره في عالمنا، ثم تخيّل ما قد يأتي بعد ذلك.
+   </p>
+   <button class="btn" onclick="go('past',1)">ابدأ الرحلة ←</button>
+   <p class="small-note">ثلاث حقب. أسئلة مختلفة. ومستقبل لم يُكتب بعد.</p>
+  </div>
+ </div>
+</section>
+
+<!-- الماضي -->
+<section class="screen" id="past">
+ <div class="wrap">
+  <div class="section-head">
+   <span class="era-label"><i></i> المحطة الأولى · الماضي</span>
+   <h2>حين كانت الفكرة مجرّد سؤال</h2>
+   <p>
+    قبل أن يصبح الذكاء الاصطناعي جزءًا من تفاصيل يومنا،
+    كان سؤالًا علميًا: هل يمكن للآلة أن تنفّذ مهام نربطها عادةً بالتفكير البشري؟
+   </p>
+  </div>
+
+  <div class="timeline">
+   <div class="event">
+    <b>1950 — سؤال غيّر طريقة التفكير</b>
+    <p>نشر آلان تورنغ مقالته التي ناقشت إمكانية تفكير الآلات، وطرح ما عُرف لاحقًا باختبار تورنغ.</p>
+   </div>
+   <div class="event">
+    <b>1956 — ظهور المصطلح</b>
+    <p>في ورشة دارتموث البحثية، استُخدم مصطلح الذكاء الاصطناعي رسميًا، وتبلور مجال بحثي يحمل هذا الاسم.</p>
+   </div>
+   <div class="event">
+    <b>من القواعد إلى التعلّم</b>
+    <p>تطورت الأساليب من أنظمة تعتمد على قواعد يكتبها البشر إلى نماذج تتعلم الأنماط من البيانات.</p>
+   </div>
+  </div>
+
+  <div class="question">
+   <span class="tag">اختبر ملاحظتك</span>
+   <h3>أي حدث ارتبط بظهور مصطلح «الذكاء الاصطناعي»؟</h3>
+   <div class="options">
+    <button class="option" onclick="answer(this,false,'1950 ارتبط بمقالة آلان تورنغ، أما المصطلح فظهر في ورشة دارتموث عام 1956.')">عام 1950</button>
+    <button class="option" onclick="answer(this,true,'صحيح! ارتبط ظهور المصطلح بورشة دارتموث البحثية عام 1956.')">عام 1956</button>
+    <button class="option" onclick="answer(this,false,'جرّب مرة أخرى: تذكّر ورشة دارتموث البحثية.')">عام 2000</button>
+    <button class="option" onclick="answer(this,false,'ليس هذا التاريخ. راجع المحطة الزمنية ثم حاول.')">عام 2020</button>
+   </div>
+   <div class="feedback" id="feedback"></div>
+  </div>
+
+  <div class="nav">
+   <button class="btn" onclick="go('present',2)">انتقل إلى الحاضر ←</button>
+  </div>
+ </div>
+</section>
+
+<!-- الحاضر -->
+<section class="screen" id="present">
+ <div class="wrap">
+  <div class="section-head">
+   <span class="era-label"><i></i> المحطة الثانية · الحاضر</span>
+   <h2>الذكاء الاصطناعي هنا… الآن</h2>
+   <p>قد لا نراه مباشرة، لكن أثره يظهر في أدوات نستخدمها وقرارات يساعد المختصين على اتخاذها. استكشف ثلاث محطات من حياتنا.</p>
+  </div>
+
+  <div class="grid">
+   <article class="card">
+    <div class="icon">🩺</div>
+    <h3>في الطب</h3>
+    <p>تساعد بعض الأنظمة المختصين على تحليل الصور الطبية ورصد أنماط قد تحتاج إلى مراجعة، مع بقاء القرار الطبي للمختص.</p>
+   </article>
+   <article class="card">
+    <div class="icon">🪐</div>
+    <h3>في الفضاء</h3>
+    <p>تُستخدم تقنيات تعلم الآلة لتحليل كميات كبيرة من البيانات والصور، والمساعدة في اكتشاف أنماط يصعب رصدها يدويًا.</p>
+   </article>
+   <article class="card">
+    <div class="icon">📚</div>
+    <h3>في التعليم</h3>
+    <p>يمكن للأدوات الذكية تقديم شرح وتدريبات تتكيف مع احتياجات المتعلم، لكنها لا تستبدل دور المعلم أو جهد الطالب.</p>
+   </article>
+  </div>
+
+  <h3 style="margin-top:38px">العالم نفسه… بطريقتين مختلفتين</h3>
+  <p class="small-note">قارن بين طريقة إنجاز المهمة دون الذكاء الاصطناعي ومع الاستعانة به.</p>
+
+  <div class="split">
+   <div class="compare">
+    <span class="tag">دون أدوات الذكاء الاصطناعي</span>
+    <h3>البحث عن معلومة</h3>
+    <p>تتنقل بين مصادر متعددة، تقرأ وتفرز المعلومات بنفسك، ثم تقارن بينها وتتحقق من صحتها.</p>
+   </div>
+   <div class="compare">
+    <span class="tag">مع أدوات الذكاء الاصطناعي</span>
+    <h3>البحث بمساعدة ذكية</h3>
+    <p>يمكن للأداة تلخيص محتوى أو اقتراح كلمات بحث وتنظيم الأفكار بسرعة، لكن عليك مراجعة المصادر والتحقق من النتائج.</p>
+   </div>
+  </div>
+
+  <div class="question">
+   <span class="tag">لحظة فضول</span>
+   <h3>هل تعني الإجابة الواثقة دائمًا أنها صحيحة؟</h3>
+   <div class="options">
+    <button class="option" onclick="answer(this,false,'الإجابة الواثقة قد تبدو مقنعة، لكنها ليست ضمانًا للصحة.')">نعم، دائمًا</button>
+    <button class="option" onclick="answer(this,true,'أحسنت! قد تنتج النماذج إجابات غير دقيقة؛ لذلك نتحقق من المصادر.')">لا، يجب التحقق</button>
+   </div>
+   <div class="feedback" id="feedback"></div>
+  </div>
+
+  <div class="nav">
+   <button class="btn secondary" onclick="go('past',1)">العودة للماضي</button>
+   <button class="btn" onclick="go('future',3)">اعبر إلى المستقبل ←</button>
+  </div>
+ </div>
+</section>
+
+<!-- المستقبل -->
+<section class="screen" id="future">
+ <div class="wrap">
+  <div class="section-head">
+   <span class="era-label"><i></i> المحطة الثالثة · المستقبل</span>
+   <h2>المستقبل لم يُكتب بعد</h2>
+   <p>لا نستطيع معرفة المستقبل بدقة، لكن يمكننا تخيّل احتمالاته والتفكير في القرارات التي تجعل التقنية أكثر نفعًا للإنسان.</p>
+  </div>
+
+  <div class="grid">
+   <article class="card">
+    <div class="icon">🏙️</div>
+    <h3>مدن أكثر استجابة</h3>
+    <p>قد تساعد الأنظمة الذكية في إدارة استهلاك الطاقة وتحليل حركة المرور وتحسين الخدمات.</p>
+   </article>
+   <article class="card">
+    <div class="icon">🧬</div>
+    <h3>رعاية صحية أدق</h3>
+    <p>قد تتطور أدوات دعم التشخيص واكتشاف الأنماط، مع أهمية الخصوصية والإشراف الطبي.</p>
+   </article>
+   <article class="card">
+    <div class="icon">🌱</div>
+    <h3>حلول لتحديات كبرى</h3>
+    <p>قد تسهم النماذج في دراسة المناخ والموارد والبيانات البيئية، لدعم قرارات أكثر وعيًا.</p>
+   </article>
+  </div>
+
+  <div class="future-box">
+   <span class="tag">كبسولة الزمن · رسالتك للمستقبل</span>
+   <h3>تخيّل أنك تستطيع إرسال رسالة إلى شخص يعيش بعد 50 سنة… ماذا ستقول له عن الذكاء الاصطناعي في زمننا؟</h3>
+   <textarea id="message" placeholder="اكتب رسالتك هنا..."></textarea>
+   <div class="nav">
+    <button class="btn" onclick="saveMessage()">احفظ رسالتي في كبسولة الزمن</button>
+   </div>
+   <div class="feedback" id="saved"></div>
+  </div>
+
+  <div class="nav">
+   <button class="btn secondary" onclick="go('present',2)">العودة للحاضر</button>
+   <button class="btn" onclick="go('end',4)">اكتملت الرحلة ←</button>
+  </div>
+ </div>
+</section>
+
+<!-- النهاية -->
+<section class="screen" id="end">
+ <div class="wrap">
+  <div class="hero" style="min-height:65vh">
+   <div class="hero-content">
+    <div class="eyebrow">نهاية الرحلة · بداية التفكير</div>
+    <h1 style="font-size:clamp(2.5rem,7vw,4.5rem)">الزمن يتغير،<br>والاختيار لنا.</h1>
+    <p class="lead">
+     الذكاء الاصطناعي ليس بديلًا عن فضول الإنسان أو حكمه؛
+     إنه أداة تتسع إمكاناتها عندما نعرف كيف نوجّهها ونراجع نتائجها.
+    </p>
+    <p style="color:var(--cyan);font-size:1.2rem">
+     «المستقبل لا تصنعه التقنية وحدها، بل الطريقة التي نختار أن نستخدمها بها».
+    </p>
+    <button class="btn" onclick="go('credits',5)">اكتشف ما وراء التجربة</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- المصادر والكواليس -->
+<section class="screen" id="credits">
+ <div class="wrap">
+  <div class="section-head">
+   <span class="era-label"><i></i> خلف الكواليس</span>
+   <h2>كيف صُنعت هذه الرحلة؟</h2>
+   <p>هذه التجربة ثمرة بحث وتوجيه ومراجعة بشرية، استعنت فيها بأدوات الذكاء الاصطناعي لتحويل الفكرة إلى تجربة رقمية.</p>
+  </div>
+
+  <div class="grid">
+   <article class="card">
+    <div class="icon">✦</div>
+    <h3>الأداة المستخدمة</h3>
+    <p>استُخدم ChatGPT للمساعدة في تطوير الفكرة، تنظيم المحتوى، اقتراح التفاعلات، وكتابة مسودة الكود.</p>
+   </article>
+   <article class="card">
+    <div class="icon">⌘</div>
+    <h3>دور الذكاء الاصطناعي</h3>
+    <p>ساعد في بناء الهيكل الأولي للصفحة، وصياغة النصوص، واقتراح أساليب عرض المحطات الثلاث.</p>
+   </article>
+   <article class="card">
+    <div class="icon">♡</div>
+    <h3>مساهمتي الشخصية</h3>
+    <p>اخترت الفكرة والهوية، وحددت تسلسل الرحلة، وراجعت المحتوى، وعدّلت التصميم والتفاعلات بما يخدم الهدف.</p>
+   </article>
+  </div>
+
+  <div class="future-box">
+   <h3>مصادر للاستكشاف والتحقق</h3>
+   <p class="small-note">
+    • Stanford Encyclopedia of Philosophy — Alan Turing:
+    <a href="https://plato.stanford.edu/entries/turing/" target="_blank" rel="noopener" style="color:var(--cyan)">قراءة المصدر</a><br>
+    • Dartmouth — Artificial Intelligence:
+    <a href="https://home.dartmouth.edu/about/artificial-intelligence-ai" target="_blank" rel="noopener" style="color:var(--cyan)">قراءة المصدر</a><br>
+    • NASA:
+    <a href="https://www.nasa.gov/" target="_blank" rel="noopener" style="color:var(--cyan)">موقع ناسا</a><br>
+    • WHO — Artificial Intelligence:
+    <a href="https://www.who.int/health-topics/artificial-intelligence" target="_blank" rel="noopener" style="color:var(--cyan)">قراءة المصدر</a>
+   </p>
+  </div>
+
+  <div class="nav">
+   <button class="btn" onclick="go('start',0)">ابدأ الرحلة من جديد ↻</button>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<footer>خارج حدود الزمن | BEYOND TIME · AI THROUGH MY EYES</footer>
+
+<script>
+function go(id,n){
+ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.getElementById('bar').style.width=(n/5*100)+'%';
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function answer(btn,correct,msg){
+ const group=btn.parentElement;
+ group.querySelectorAll('button').forEach(b=>{
+  b.classList.remove('selected');
+  b.disabled=true;
+ });
+ btn.classList.add('selected');
+ const feedback=group.nextElementSibling;
+ feedback.textContent=msg;
+}
+
+function saveMessage(){
+ const value=document.getElementById('message').value.trim();
+ const output=document.getElementById('saved');
+ if(!value){
+  output.textContent='اكتب رسالتك أولًا لتضعها في كبسولة الزمن.';
+  return;
+ }
+ output.textContent='تم حفظ رسالتك في هذه الجلسة. شكرًا لأنك أضفت صوتك إلى المستقبل.';
+}
+</script>
+
+</body>
+</html>
